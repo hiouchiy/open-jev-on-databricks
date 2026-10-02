@@ -1,0 +1,27 @@
+# AI Runtime CLI workload spec — <model-name> GPU batch inference (template).
+# Run from this directory:  COPYFILE_DISABLE=1 air run --file batch_inference.yaml --watch --profile <profile>
+
+experiment_name: <model-name>-batch-inference   # slug only (letters, digits, - and _)
+max_retries: 0
+timeout_minutes: 60
+
+environment:
+  version: "4"            # env "4" = torch 2.7.1 (cu126); declare only what the model adds
+  dependencies:
+    - "transformers>=4.48,<5"
+
+env_variables:
+  UC_CATALOG: main
+  UC_SCHEMA: air_samples
+  MAX_STATES: "0"
+
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10   # GPU_1xA10 | GPU_1xH100 | GPU_8xH100
+
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .
+
+command: python $CODE_SOURCE_PATH/batch_inference.py

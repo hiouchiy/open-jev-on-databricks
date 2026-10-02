@@ -1,0 +1,39 @@
+# AI Runtime CLI workload spec — open-jev (DeBERTa-v3-large) GPU batch inference + evaluation.
+#
+# Run it from this directory (models/open-jev-deberta-v3-large/01_ai_runtime/cli) with:
+#   COPYFILE_DISABLE=1 air run --file batch_inference.yaml --watch --profile <your-profile>
+# Smoke test (100 texts per split):
+#   ... --override env_variables.MAX_STATES=100
+
+experiment_name: open-jev-batch-inference
+max_retries: 0          # fail fast while experimenting (default is 3 retries)
+timeout_minutes: 60
+
+environment:
+  # Env "4" preinstalls torch 2.7.1 (cu126), MLflow, pandas/pyarrow and databricks-sdk.
+  # Only what the model needs on top of that is declared; transformers is capped <5 because the
+  # checkpoint was saved with 4.57 and env "4" ships an older huggingface_hub.
+  version: "4"
+  dependencies:
+    - "transformers>=4.48,<5"
+    - "sentencepiece>=0.2.0"   # DeBERTa-v3 tokenizer
+    - "protobuf"
+
+# Override without editing files:  air run ... --override env_variables.UC_CATALOG=<your-catalog>
+env_variables:
+  UC_CATALOG: main
+  UC_SCHEMA: air_samples
+  UC_VOLUME: predictions
+  MAX_STATES: "0"     # 0 = full test + ood-test splits (3,000 texts each)
+  BATCH_SIZE: "64"
+
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10   # the 435M-param encoder needs < 8 GB; A10 is plenty
+
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .   # only this directory is uploaded
+
+command: python $CODE_SOURCE_PATH/batch_inference.py

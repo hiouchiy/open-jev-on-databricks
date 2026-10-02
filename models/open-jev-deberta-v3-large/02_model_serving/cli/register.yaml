@@ -1,0 +1,47 @@
+# AI Runtime CLI workload spec — register open-jev for RTX PRO 6000 (GPU_LARGE_RTX) Model Serving.
+#
+# Run it from this directory (models/open-jev-deberta-v3-large/02_model_serving/cli) with:
+#   COPYFILE_DISABLE=1 air run --file register.yaml --watch --profile <your-profile>
+# Takes ~6 min (measured: install ~2 min, log 17 s, env_pack register 86 s) plus any GPU queue time.
+
+# KNOWN ISSUE (2026-10): registration succeeds, but endpoints created from a version registered by
+# THIS AIR CLI job stay at "Creating resources for served entity." for 10+ hours (reproduced on
+# GPU_MEDIUM and GPU_LARGE_RTX, two workspaces). Versions registered by the notebook
+# ../notebook/01_register.py deploy in ~3 min. Use the notebook path for serving.
+
+experiment_name: open-jev-register
+max_retries: 0
+timeout_minutes: 90
+
+environment:
+  version: "4"
+  # The torch/transformers/MLflow serving stack is installed by `command` below rather than here,
+  # because it needs the PyTorch cu128 index (Blackwell kernels) and must replace the env's
+  # preinstalled torch 2.7.1. (`version` requires a non-empty `dependencies` list.)
+  dependencies:
+    - "sentencepiece>=0.2.0"   # DeBERTa-v3 tokenizer
+
+env_variables:
+  UC_CATALOG: main
+  UC_SCHEMA: air_samples
+  MODEL_NAME: open_jev_deberta_v3_large
+
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10   # registration only; RTX is used at serving time
+
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .   # only this directory is uploaded
+
+# 1) torch 2.10 cu128 (+ matching torchvision: the preinstalled one is built for torch 2.7.1 and
+#    breaks transformers' import probe), transformers 4.57 (checkpoint format), tokenizer deps,
+#    MLflow 3.12 + databricks-sdk>=0.102 (env_pack requirements); 2) register.
+command: |
+  pip install --quiet --extra-index-url https://download.pytorch.org/whl/cu128 \
+    "torch==2.10.0" "torchvision" \
+    "transformers==4.57.6" "safetensors>=0.4.3" "huggingface_hub>=0.34,<1.0" \
+    "sentencepiece>=0.2.0" "protobuf>=5.29.5,<6" \
+    "mlflow==3.12.0" "databricks-sdk>=0.102.0"
+  python $CODE_SOURCE_PATH/register.py

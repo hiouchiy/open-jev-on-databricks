@@ -1,0 +1,53 @@
+[
+ {
+  "name": "T4",
+  "endpoint": "open-jev-t4",
+  "device": "Tesla T4 (float16)",
+  "accuracy": 0.8338150289017341,
+  "accuracy_n": 692,
+  "server_p50_ms": 60.09,
+  "server_p95_ms": 77.55,
+  "rtt_p50_ms": 216.09339595306665,
+  "rtt_p95_ms": 273.298375075683,
+  "throughput_qps": 56.30098653798811,
+  "throughput_texts_ps": 24.443653506473844,
+  "batch_server_p50_ms": 1282.335,
+  "dbu_per_hour": 10.48,
+  "usd_per_hour": 0.9432,
+  "usd_per_1m_questions": 4.653559664060595
+ },
+ {
+  "name": "A10G",
+  "endpoint": "open-jev-a10",
+  "device": "NVIDIA A10G (bfloat16)",
+  "accuracy": 0.8338150289017341,
+  "accuracy_n": 692,
+  "server_p50_ms": 44.22,
+  "server_p95_ms": 53.24,
+  "rtt_p50_ms": 202.8799793915823,
+  "rtt_p95_ms": 245.04145910032094,
+  "throughput_qps": 117.94654046262528,
+  "throughput_texts_ps": 51.20770602146422,
+  "batch_server_p50_ms": 605.13,
+  "dbu_per_hour": 20.0,
+  "usd_per_hour": 1.7999999999999998,
+  "usd_per_1m_questions": 4.23920869606548
+ },
+ {
+  "name": "RTX",
+  "endpoint": "open-jev-rtx-nb",
+  "device": "NVIDIA RTX PRO 6000 Blackwell Server Edition (bfloat16)",
+  "accuracy": 0.8338150289017341,
+  "accuracy_n": 692,
+  "server_p50_ms": 21.085,
+  "server_p95_ms": 23.5,
+  "rtt_p50_ms": 173.59077045693994,
+  "rtt_p95_ms": 206.33537508547306,
+  "throughput_qps": 378.7640325168198,
+  "throughput_texts_ps": 164.44430801064217,
+  "batch_server_p50_ms": 185.52499999999998,
+  "dbu_per_hour": 80.0,
+  "usd_per_hour": 7.199999999999999,
+  "usd_per_1m_questions": 5.280332418868694
+ }
+]
