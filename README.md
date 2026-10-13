@@ -30,7 +30,7 @@
 
 | モデル | ベース | パラメータ | AI Runtime | Model Serving | 状態 |
 |---|---|---|---|---|---|
-| [open-jev-deberta-v3-large](models/open-jev-deberta-v3-large/) | DeBERTa-v3-large | 435M | A10 でバッチ推論 + 評価 | RTX PRO 6000（`GPU_LARGE_RTX`） | ✅ 検証済み |
+| [open-jev-deberta-v3-large](models/open-jev-deberta-v3-large/) | DeBERTa-v3-large | 435M | A10 でバッチ推論 + 評価 | RTX PRO 6000（`GPU_LARGE_RTX`）、[TypeSafe AI API 互換](models/open-jev-deberta-v3-large/02_model_serving/typesafe_api/) | ✅ 検証済み |
 
 ## リポジトリ構成
 

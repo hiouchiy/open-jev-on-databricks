@@ -26,6 +26,7 @@
   cli/query_endpoint.py            ローカルからのクエリ（標準ライブラリのみ）
   cli/benchmark_endpoints.py       GPU 別の精度・レイテンシ・スループット・コスト比較（標準ライブラリのみ）
   benchmark_results.json           上記の計測結果（T4 / A10G / RTX）
+  typesafe_api/                    TypeSafe AI API 互換で提供する（公式 SDK ごと差し替え）
 ```
 
 ---
@@ -181,6 +182,13 @@ python 02_model_serving/cli/benchmark_endpoints.py --profile <profile> \
   --endpoint T4=<t4-endpoint> --endpoint A10G=<a10-endpoint> --endpoint RTX=<rtx-endpoint> \
   --dbu T4=10.48 --dbu A10G=20 --dbu RTX=80 --usd-per-dbu <your $/DBU>
 ```
+
+### TypeSafe AI API 互換で提供する
+
+TypeSafe AI の System One API（`POST /v1/systemone`）と同じ仕様で公開することもできます。
+公式の `typesafe-sdk` の `base_url` と `api_key` を変えるだけで、既存のコードがそのまま Databricks 上の open-jev を呼びます。
+構成は Model Serving と Databricks App のゲートウェイの 2 段です。
+手順、`criteria` の説明文の扱いの評価結果、検証結果は [typesafe_api/README.md](02_model_serving/typesafe_api/README.md) を参照してください。
 
 ---
 

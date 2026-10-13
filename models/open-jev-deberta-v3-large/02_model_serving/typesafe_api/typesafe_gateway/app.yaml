@@ -1,0 +1,11 @@
+command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+
+env:
+  # Serving endpoint that runs the TypeSafe-compatible model (register_typesafe.py).
+  # Add it to the app as a resource with key "serving-endpoint" and permission "Can query".
+  - name: SERVING_ENDPOINT
+    valueFrom: serving-endpoint
+  # Model names accepted in the request's `model` field and listed by GET /v1/models.
+  # Keep this in sync with the model's `model_aliases` (register_typesafe.py).
+  - name: MODEL_ALIASES
+    value: "jev-latest,open-jev-deberta-v3-large"

@@ -1,0 +1,28 @@
+# AI Runtime CLI workload spec — compare how TypeSafe `criteria` are turned into open-jev option texts.
+# Run from this directory:
+#   COPYFILE_DISABLE=1 air run --file eval_criteria_modes.yaml --watch --profile <your-profile>
+
+experiment_name: open-jev-typesafe-criteria-eval
+max_retries: 0
+timeout_minutes: 60
+
+environment:
+  version: "4"
+  dependencies:
+    - "transformers>=4.48,<5"   # checkpoint saved with 4.57
+    - "sentencepiece>=0.2.0"    # DeBERTa-v3 tokenizer
+    - "protobuf"
+
+env_variables:
+  MAX_STATES: "0"   # 0 = all 2,000 banking77 + SST-5 texts of the in-domain test split
+
+compute:
+  num_accelerators: 1
+  accelerator_type: GPU_1xA10
+
+code_source:
+  type: snapshot
+  snapshot:
+    root_path: .   # uploads typesafe_adapter.py alongside this script
+
+command: python $CODE_SOURCE_PATH/eval_criteria_modes.py
